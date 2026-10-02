@@ -1,0 +1,1 @@
+"""Static EDA plotting functions."""

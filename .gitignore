@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data generated locally
+*.tmp
+*.bak
+
+# Do not commit raw/processed datasets by default
+# Remove these rules if the team explicitly decides to version the data.
+data/raw/*.xlsx
+data/raw/*.xls
+data/raw/*.csv
+data/processed/*.csv
+
+# Model artifacts
+models/*.joblib
+models/*.pkl
+
+# Outputs
+outputs/figures/*.png
+outputs/figures/*.jpg
