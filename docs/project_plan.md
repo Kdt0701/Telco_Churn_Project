@@ -1,43 +1,60 @@
-# Project Plan
+# Project Plan — Đề tài 5 Customer Churn
 
-## Phase 1 — Data Understanding
-- Verify all five source files exist.
-- Read workbook sheets and headers.
-- Confirm row counts and unique customer IDs.
-- Check join cardinality.
+## Phase 1 — Data inspection
+1. Put five IBM Excel files into `data/raw/`.
+2. Run `01_data_inspection.ipynb`.
+3. Confirm row count, columns, missing values, duplicates and Join keys.
+4. Confirm each customer table is one-to-one on `CustomerID`.
 
 ## Phase 2 — Preprocessing
-- Standardize column names.
-- Convert numeric fields.
-- Handle missing values.
-- Check outliers for Monthly Charges / Total Charges.
-- Merge tables.
-- Create Tenure_Group and other justified calculated fields.
+1. Standardize text and `CustomerID`.
+2. Convert numeric fields.
+3. Convert blank `Total Charges` to numeric; zero-tenure blank values become 0, remaining missing values use the median.
+4. Detect/cap charge outliers with IQR while retaining original fields.
+5. Join Demographics + Location + Services + Status on `CustomerID`.
+6. Join Population through `Zip Code` as contextual enrichment.
+7. Create `Tenure_Group`, `CLV_Estimated`, `Churn_Flag`.
+8. Export `data/processed/final_dataset.csv`.
 
 ## Phase 3 — EDA
-- Tenure distribution by churn.
-- Churn by contract.
-- Monthly Charges by churn.
+Required static figures:
+- Tenure distribution by churn with histogram/KDE.
+- Churn rate by contract.
+- Monthly charges boxplot by churn.
 - Correlation heatmap.
 
 ## Phase 4 — Logistic Regression
-- Train/test split.
-- Encoding + scaling through sklearn Pipeline.
-- Evaluate with confusion matrix, precision, recall, F1 and ROC-AUC.
-- Produce probability for each customer.
-- Create Low / Medium / High risk groups.
+- Target: `Churn_Flag`.
+- Numeric preprocessing: median imputation + standardization.
+- Categorical preprocessing: most-frequent imputation + one-hot encoding.
+- Logistic Regression with reproducible seed and class balancing.
+- Evaluate Accuracy, Precision, Recall, F1 and ROC-AUC.
+- Score every customer with `Churn_Probability` and create `Risk_Level`.
 
 ## Phase 5 — Dashboard
-- KPI cards.
-- Map.
-- Bar, line, donut, heatmap, scatter, treemap.
-- Multi-level filters.
-- Cross-filter / drill-down behavior supported by the chosen dashboard design.
+Tool: Streamlit + Plotly.
+
+Required visuals:
+1. Geographic Map
+2. Bar Chart
+3. Line Chart
+4. Donut Chart
+5. Heatmap
+6. Scatter Plot
+7. Treemap
+8. KPI / Gauge
+
+Required interactions:
+- Contract filter
+- Payment Method filter
+- Internet Service filter
+- Risk filter
+- State / City drill-down
+- Plotly hover tooltip
+- Cross-filtering through shared Streamlit filter state
 
 ## Phase 6 — Storytelling
-- Identify documented high-risk customer segments from the analysis.
-- Connect findings to concrete retention actions.
-- Clearly distinguish correlation/prediction from causal claims.
+Identify high-risk segments from the model and EDA. Phrase findings as associations/predictions, not causal proof. Convert findings into concrete retention actions.
 
-## Phase 7 — Report
-- Build the 7 required sections and expand to at least 40 pages with methodology, figures, tables, implementation details and limitations.
+## Phase 7 — IEEE report
+Build the 7 required sections and include methodology, tables, figures, model results, limitations, demo link and usage instructions. Expand to at least 40 pages without padding unrelated content.

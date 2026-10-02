@@ -1,71 +1,41 @@
-# Telecom Customer Churn — Predict & Visualize
+# Telco Churn Project
 
-Đề tài 5 — Lĩnh vực 1: Thương mại điện tử & Bán lẻ
+Đề tài 5 — **Dự đoán và trực quan hóa tỷ lệ rời bỏ của khách hàng (Customer Churn) trong ngành viễn thông**.
+
+## Dataset đã chốt
+IBM Cognos Analytics Telco Customer Churn extended sample, gồm các bảng Demographics, Location, Population, Services và Status. Bộ dữ liệu cơ sở có 7.043 khách hàng và bản mở rộng cung cấp thông tin địa lý để phục vụ bản đồ.
 
 ## Mục tiêu
-Phân tích các yếu tố liên quan đến Customer Churn, xây dựng Logistic Regression để dự đoán xác suất rời bỏ, phân nhóm rủi ro và xây dựng Dashboard tương tác.
-
-## Dataset
-Nguồn chính: IBM Cognos Analytics Telco customer churn sample.
-
-Bộ dữ liệu mở rộng gồm 5 bảng:
-- Demographics
-- Location
-- Population
-- Services
-- Status
-
-Các file raw đặt trong `data/raw/`.
+- Khám phá các yếu tố liên quan đến Customer Churn.
+- Join tối thiểu 3 bảng qua `CustomerID`.
+- Tạo `Tenure_Group`, `CLV_Estimated`, `Churn_Flag`.
+- Xây dựng EDA tĩnh.
+- Huấn luyện Logistic Regression.
+- Dự đoán xác suất churn và phân nhóm Low / Medium / High Risk.
+- Xây dựng Dashboard Streamlit + Plotly với 8 loại biểu đồ bắt buộc.
 
 ## Công nghệ
-- Python 3.11+
-- pandas, numpy
-- matplotlib, seaborn
-- scikit-learn
-- plotly
-- streamlit
-- openpyxl
-- jupyter
+Python 3.11+, pandas, numpy, matplotlib, seaborn, scikit-learn, Plotly, Streamlit, openpyxl, joblib, Jupyter.
 
-## Pipeline
-1. Load 5 bảng raw
-2. Kiểm tra kích thước, kiểu dữ liệu, duplicate và missing values
-3. Chuẩn hóa tên cột / khóa `Customer ID`
-4. Join các bảng bằng khóa khách hàng
-5. Feature Engineering
-6. EDA tĩnh
-7. Logistic Regression
-8. Tạo `Churn_Probability` và `Risk_Level`
-9. Xuất dữ liệu phục vụ Dashboard
-10. Streamlit + Plotly Dashboard
-
-## Cấu trúc
-```text
-telco_churn_project/
-├── data/
-│   ├── raw/
-│   └── processed/
-├── notebooks/
-├── src/
-├── models/
-├── dashboard/
-├── docs/
-├── reports/
-├── outputs/
-│   └── figures/
-├── .gitignore
-├── README.md
-└── requirements.txt
-```
-
-## Lệnh cài đặt
+## Setup
 ```bash
 python -m venv .venv
-.venv\Scripts\activate
+# Git Bash / macOS / Linux
+source .venv/bin/activate
+# Windows CMD/PowerShell: .venv\\Scripts\\activate
 pip install -r requirements.txt
 ```
 
-## Thứ tự chạy
+## Data placement
+Copy 5 file Excel vào:
+
+```text
+data/raw/
+```
+
+Tên file phải đúng theo `src/data_loader.py`.
+
+## Run order
 ```text
 01_data_inspection.ipynb
         ↓
@@ -78,33 +48,15 @@ pip install -r requirements.txt
 streamlit run dashboard/app.py
 ```
 
-## Lưu ý về mô hình
-Không dùng `Customer ID` làm biến đầu vào mô hình.
-Không đưa các biến được tạo từ kết quả churn hoặc có nguy cơ rò rỉ mục tiêu vào Logistic Regression chỉ để làm điểm số đẹp.
+## Important modeling rule
+Do not use outcome-derived or leakage-prone fields (`Churn Label`, `Churn Value`, `Churn Score`, `Churn Category`, `Churn Reason`, `Customer Status`) as model inputs. The baseline model also excludes `CLTV`.
 
-## Mục tiêu đầu ra
-`data/processed/final_dataset.csv`
+## Current project status
+**Phase 1–4 code framework is ready.** Actual execution depends on the five raw Excel files being present locally.
 
-Các trường dự kiến bổ sung:
-- `Tenure_Group`
-- `CLV_Estimated` (nếu cần tính từ dữ liệu dịch vụ)
-- `Churn_Flag`
-- `Churn_Probability`
-- `Risk_Level`
+## Báo cáo và hình ảnh
+`reports/report.docx` là living report. Sau mỗi notebook/milestone, cập nhật report cùng với output.
 
-## Dashboard bắt buộc
-- Geographic Map
-- Bar Chart
-- Line Chart
-- Donut Chart
-- Heatmap
-- Scatter Plot
-- Treemap
-- KPI / Gauge
+Các hình bằng chứng được chuẩn hóa trong `outputs/report_assets/` theo mã F00–F17. Xem `docs/report_figure_plan.md` để biết hình nào cần chụp, đặt ở mục nào và chụp vào thời điểm nào.
 
-Bộ lọc chính:
-- Contract
-- Payment Method
-- Internet Service
-- State / City
-- Risk Level
+Quy tắc: không ghi số liệu minh họa thành kết quả chính thức; mọi metric/insight trong báo cáo phải lấy từ run thật trên 5 file raw.
